@@ -27,10 +27,11 @@ int main(int argc, char * argv[]) {
         cout<<"Digite las dimensiones de la matriz a operar "<<endl;
     	cout<<"Numero de filas: ";cin>>filas;
     	cout<<"Numero de columnas: ";cin>>columnas;
-        if (filas < rank_sz){
+        if (filas > rank_sz){
         	filas=rank_sz;
         	cout << "Cantidad filas cambiada a " << filas << endl;
         }
+        filas=rank_sz;
     }
 
     MPI_Bcast(&filas, 1,MPI_INT,  0,  MPI_COMM_WORLD);
