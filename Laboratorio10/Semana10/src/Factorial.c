@@ -39,7 +39,7 @@ long thread_count;
 long long n;
 int flag;
 double sum;
-
+double my_factorial=1;
 void* Thread_sum(void* rank);
 
 /* Only executed by main thread */
@@ -69,12 +69,12 @@ int main(int argc, char* argv[]) {
    GET_TIME(finish);
    elapsed = finish - start;
 
-   sum = 4.0*sum;
-   printf("With n = %lld terms,\n", n);
-   printf("   Multi-threaded estimate of pi  = %.15f\n", sum);
+   //sum = 4.0*sum;
+   printf("With n = %lld factorial,\n", n);
+   printf("   Multi-threaded estimate of factorial  = %.15f\n", my_factorial);
    printf("   Elapsed time = %e seconds\n", elapsed);
 
-   GET_TIME(start);
+  /* GET_TIME(start);
    sum = Serial_pi(n);
    GET_TIME(finish);
    elapsed = finish - start;
@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
    printf("   Elapsed time = %e seconds\n", elapsed);
    printf("   Math library estimate of pi    = %.15f\n",
        4.0*atan(1.0));
-
+	*/
    free(thread_handles);
    return 0;
 }  /* main */
@@ -100,19 +100,12 @@ void* Thread_sum(void* rank) {
    double factor;
    long long i;
    long long my_n = n/thread_count;
-   long long my_first_i = my_n*my_rank;
-   long long my_last_i = my_first_i + my_n;
+   long long my_f= my_n*(my_rank+1);
 
-   if (my_first_i % 2 == 0)
-      factor = 1.0;
-   else
-      factor = -1.0;
-
-   for (i = my_first_i; i < my_last_i; i++, factor = -factor) {
-      while (flag != my_rank);
-      sum += factor/(2*i+1);
-
-      flag = (flag+1) % thread_count;
+   for (int i=0; i<my_n;i++) {
+      //while (flag != my_rank);
+      my_factorial=my_factorial*(my_f-i);
+      //flag = (flag+1) % thread_count;
    }
 
    return NULL;
@@ -135,6 +128,7 @@ double Serial_pi(long long n) {
    return 4.0*sum;
 
 }  /* Serial_pi */
+
 
 /*------------------------------------------------------------------
  * Function:    Get_args
